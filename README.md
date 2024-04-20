@@ -15,7 +15,7 @@ cd zews-hotel.ru
 composer i
 copy .env.example .env
 php artisan key:generate
-php artisan migrate:fresh --seed
+php artisan migrate --seed
 ```
 После можно перезапускать OSPanel для видимости нового домена.
 
@@ -23,4 +23,11 @@ php artisan migrate:fresh --seed
 ```apacheconf
 RewriteEngine on
 RewriteRule (.*)? /public/$1
+```
+
+## Обновление
+
+```bat
+git pull
+php artisan migrate:fresh --seed
 ```
