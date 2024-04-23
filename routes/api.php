@@ -28,7 +28,7 @@ Route::controller(AuthController::class)
 Route::controller(UserController::class)
 ->prefix('users')
 ->group(function ($users) {
-    $users->patch('', 'edit');
+    $users->middleware('token.auth:user' )->patch('', 'editSelf');
     $users->middleware('token.auth:admin')->group(function ($usersManage) {
         $usersManage->post('', 'create' );
         $usersManage->get ('', 'showAll');

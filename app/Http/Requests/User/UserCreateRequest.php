@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\User;
 
 use App\Http\Requests\ApiRequest;
 
-class SignupRequest extends ApiRequest
+class UserCreateRequest extends ApiRequest
 {
     public function rules(): array
     {
@@ -21,6 +21,7 @@ class SignupRequest extends ApiRequest
             'pass_birth_address'  => 'required|string|max:64',
             'pass_authority_name' => 'required|string|max:64',
             'pass_authority_code' => 'required|integer|max:999999',
+            'role' => 'string|exists:roles,code',
         ];
     }
 }
