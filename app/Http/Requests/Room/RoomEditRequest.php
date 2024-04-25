@@ -13,6 +13,7 @@ class RoomEditRequest extends ApiRequest
             'description' => 'string',
             'price'       => 'decimal:0,2|min:0|max:99999999999999.99',
             'type_id'     => 'integer|exists:room_types,id',
+            'removePhotos' => 'array',
         ];
     }
 }

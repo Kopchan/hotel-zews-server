@@ -57,7 +57,7 @@ class RoomController extends Controller
 
             // Сохранение файла в хранилище
             if (!Storage::exists('public'.$imageName))
-                $file->storeAs('public', $imageName);
+                $file->storeAs  ('public',$imageName);
         }
         $response['room'] = RoomResource::make($room);
 
@@ -65,12 +65,51 @@ class RoomController extends Controller
     }
     public function edit(RoomEditRequest $request, int $id) {
         $room = Room::find($id);
+        $files = $request->file('photos') ?? [];
 
         if (!$room)
             throw new ApiException(404, 'Room not found');
 
         $room->update($request->all());
-        return response(null, 204);
+
+        foreach ($files as $file) {
+            $fileName = $file->getClientOriginalName();
+            $fileExt  = $file->extension();
+
+            // Валидация файла
+            $validator = Validator::make(['file' => $file], [
+                'file' => 'mimes:png,jpeg,webp,avif',
+            ]);
+            if ($validator->fails()) {
+                // Сохранение плохого ответа API
+                $response['errors'][] = [
+                    'name'    => $fileName,
+                    'message' => $validator->errors(),
+                ];
+                continue;
+            }
+            $fileHash = md5(File::get($file->getRealPath()));
+
+            $imageName = "$fileHash.$fileExt";
+            $image = Photo::firstOrCreate(['name' => $imageName]);
+            $image->room_id = $room->id;
+            $image->save();
+
+            // Сохранение файла в хранилище
+            if (!Storage::exists('public'.$imageName))
+                $file->storeAs  ('public',$imageName);
+        }
+        foreach ($request->removePhotos ?? [] as $removePhoto) {
+            $photo = Photo::find($removePhoto);
+            if ($photo) {
+                $photo->room_id = null;
+                $photo->save();
+            }
+        }
+
+        $response['room'] = RoomResource::make($room);
+
+        return response($response, 204);
     }
     public function delete(int $id) {
         $room = Room::find($id);
