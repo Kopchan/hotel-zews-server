@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\RoomType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -95,5 +96,7 @@ class DatabaseSeeder extends Seeder
             'price' => '15000',
             'type_id' => $roomUserPresident,
         ]);
+
+        Cache::flush();
     }
 }

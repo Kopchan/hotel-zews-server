@@ -11,9 +11,9 @@ class RoomCreateRequest extends ApiRequest
         return [
             'name'        => 'required|string|max:32|unique:rooms',
             'description' => 'required|string',
-            'price'       => 'required|decimal|min:0|max:99999999999999.99',
+            'price'       => 'required|decimal:0,2|min:0|max:99999999999999.99',
             'type_id'     => 'required|integer|exists:room_types,id',
-//            'photos'      => 'array',
+            'photos'      => 'array',
         ];
     }
 }
