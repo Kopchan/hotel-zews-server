@@ -6,7 +6,6 @@ use App\Exceptions\ApiException;
 use App\Http\Requests\Room\RoomCreateRequest;
 use App\Http\Requests\Room\RoomEditRequest;
 use App\Http\Resources\RoomResource;
-use App\Models\Image;
 use App\Models\Photo;
 use App\Models\Room;
 use Illuminate\Support\Facades\File;
@@ -48,19 +47,17 @@ class RoomController extends Controller
                 ];
                 continue;
             }
-            $imageHash = md5(File::get($file->getRealPath()));
+            $fileHash = md5(File::get($file->getRealPath()));
 
-            // FIXME: Однотипные фото (ванной, например) могут "перетянуть" другой номер
-            $fileName = "$imageHash.$fileExt";
-            $image = Photo::firstOrCreate(['name' => $fileName]);
+            // FIXME: Однотипные фото (ванной, например) могут быть "перетянуты" другим номером
+            $imageName = "$fileHash.$fileExt";
+            $image = Photo::firstOrCreate(['name' => $imageName]);
             $image->room_id = $room->id;
             $image->save();
 
-            $photos["$image->id"] = $fileName;
-
             // Сохранение файла в хранилище
-            if (!Storage::exists('public'.$fileName))
-                $file->storeAs('public', $fileName);
+            if (!Storage::exists('public'.$imageName))
+                $file->storeAs('public', $imageName);
         }
         $response['room'] = RoomResource::make($room);
 

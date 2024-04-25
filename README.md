@@ -15,6 +15,7 @@ cd zews-hotel.ru
 composer i
 copy .env.example .env
 php artisan key:generate
+php artisan storage:link
 php artisan migrate --seed
 ```
 После можно перезапускать OSPanel для видимости нового домена.

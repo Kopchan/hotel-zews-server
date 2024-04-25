@@ -16,6 +16,7 @@ class RoomResource extends JsonResource
             'name'        => $this->name,
             'description' => $this->description,
             'price'       => $this->price,
+            'type'        => $this->type->name,
         ];
         if (count($this->reservations)) {
             $currentDate = new \DateTime(now());
