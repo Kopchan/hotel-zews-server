@@ -33,7 +33,7 @@ class ReservationController extends Controller
         return response(['reservations' => $reservations]);
     }
     public function show(int $id) {
-        $reservation = Room::with(['reservations', 'photos'])->find($id);
+        $reservation = Reservation::with(['room', 'user'])->find($id);
 
         if (!$reservation)
             throw new ApiException(404, 'Reservation not found');

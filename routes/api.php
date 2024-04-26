@@ -72,12 +72,12 @@ Route
     ->prefix('types')
     ->group(function ($roomTypes) {
         $roomTypes->get('', 'showAll');
+        $roomTypes->get('{id}', 'show')->where('id', '[0-9]+');
         $roomTypes->middleware('token.auth:admin')->post('', 'create');
         $roomTypes
         ->prefix('{id}')
         ->middleware('token.auth:admin')
         ->group(function ($type) {
-            $type->get   ('', 'show'  )->where('id', '[0-9]+');
             $type->patch ('', 'edit'  )->where('id', '[0-9]+');
             $type->delete('', 'delete')->where('id', '[0-9]+');
         });
