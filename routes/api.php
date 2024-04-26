@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomTypesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -49,6 +50,7 @@ Route
 ->prefix('rooms')
 ->group(function ($rooms) {
     $rooms->get('', 'showAll');
+    $rooms->get('types', 'showTypes');
     $rooms->middleware('token.auth:admin')->post('', 'create');
     $rooms->prefix('{id}')->group(function ($room) {
         $room->get('', 'show')->where('id', '[0-9]+');
@@ -61,8 +63,23 @@ Route
         ->prefix('reserve')
         ->middleware('token.auth')
         ->group(function ($reserve) {
-            $reserve->post  ('', 'createByUser');
-            $reserve->delete('', 'deleteByUser');
+            $reserve->post  ('', 'createSelf')->where('id', '[0-9]+');
+            $reserve->delete('', 'deleteSelf')->where('id', '[0-9]+');
+        });
+    });
+    $rooms
+    ->controller(RoomTypesController::class)
+    ->prefix('types')
+    ->group(function ($roomTypes) {
+        $roomTypes->get('', 'showAll');
+        $roomTypes->middleware('token.auth:admin')->post('', 'create');
+        $roomTypes
+        ->prefix('{id}')
+        ->middleware('token.auth:admin')
+        ->group(function ($type) {
+            $type->get   ('', 'show'  )->where('id', '[0-9]+');
+            $type->patch ('', 'edit'  )->where('id', '[0-9]+');
+            $type->delete('', 'delete')->where('id', '[0-9]+');
         });
     });
 });

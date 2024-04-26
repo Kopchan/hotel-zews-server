@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date     ('date_entry');
             $table->date     ('date_exit');
             $table->decimal  ('price', 16);
-            $table->boolean  ('is_paid');
+            $table->boolean  ('is_paid')->default(false);
             $table->timestamps();
 
             $table->primary(['room_id', 'user_id']);
