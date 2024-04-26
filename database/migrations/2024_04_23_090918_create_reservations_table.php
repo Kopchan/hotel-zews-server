@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->foreignId('room_id')->constrained()->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate();
-            $table->date     ('data_entry');
-            $table->date     ('data_exit');
+            $table->date     ('date_entry');
+            $table->date     ('date_exit');
             $table->decimal  ('price', 16);
             $table->boolean  ('is_paid');
             $table->timestamps();

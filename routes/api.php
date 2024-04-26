@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -15,7 +17,8 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::controller(AuthController::class)
+Route
+::controller(AuthController::class)
 ->prefix('auth')
 ->group(function ($unauthorized) {
     $unauthorized->post('login' , 'login' );
@@ -25,7 +28,8 @@ Route::controller(AuthController::class)
     });
 });
 
-Route::controller(UserController::class)
+Route
+::controller(UserController::class)
 ->prefix('users')
 ->group(function ($users) {
     $users->middleware('token.auth:user' )->patch('', 'editSelf');
@@ -37,6 +41,43 @@ Route::controller(UserController::class)
             $userManage->patch ('', 'edit'  )->where('id', '[0-9]+');
             $userManage->delete('', 'delete')->where('id', '[0-9]+');
         });
+    });
+});
+
+Route
+::controller(RoomController::class)
+->prefix('rooms')
+->group(function ($rooms) {
+    $rooms->get('', 'showAll');
+    $rooms->middleware('token.auth:admin')->post('', 'create');
+    $rooms->prefix('{id}')->group(function ($room) {
+        $room->get('', 'show')->where('id', '[0-9]+');
+        $room->middleware('token.auth:admin')->group(function ($roomManage) {
+            $roomManage->post  ('edit', 'edit'  )->where('id', '[0-9]+');
+            $roomManage->delete(''    , 'delete')->where('id', '[0-9]+');
+        });
+        $room
+        ->controller(ReservationController::class)
+        ->prefix('reserve')
+        ->middleware('token.auth')
+        ->group(function ($reserve) {
+            $reserve->post  ('', 'createByUser');
+            $reserve->delete('', 'deleteByUser');
+        });
+    });
+});
+
+Route
+::controller(ReservationController::class)
+->prefix('reservations')
+->middleware('token.auth:admin')
+->group(function ($reservations) {
+    $reservations->get ('', 'showAll');
+    $reservations->post('', 'create' );
+    $reservations->prefix('{id}')->group(function ($reservation) {
+        $reservation->get   ('', 'show'  )->where('id', '[0-9]+');
+        $reservation->patch ('', 'edit'  )->where('id', '[0-9]+');
+        $reservation->delete('', 'delete')->where('id', '[0-9]+');
     });
 });
 

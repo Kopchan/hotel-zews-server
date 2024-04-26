@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
             $table->string   ('name')->unique();
-            $table->foreignId('news_id')->nullable()->constrained();
-            $table->foreignId('room_id')->nullable()->constrained();
+            $table->foreignId('news_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

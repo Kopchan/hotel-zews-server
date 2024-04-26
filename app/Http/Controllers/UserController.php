@@ -7,7 +7,6 @@ use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Requests\User\UserEditRequest;
 use App\Http\Requests\User\UserEditSelfRequest;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\UserSafeResource;
 use App\Models\Role;
 use App\Models\User;
 
@@ -36,7 +35,7 @@ class UserController extends Controller
             ...$request->all(),
             'role_id' => $role->id,
         ]);
-        return response(null, 204);
+        return response(UserResource::make($user), 201);
     }
     public function edit(UserEditRequest $request, int $id) {
         $user = User::find($id);
