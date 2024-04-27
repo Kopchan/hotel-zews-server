@@ -9,6 +9,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
+    // Заполняемые поля
     protected $fillable = [
         'date_entry',
         'date_exit',
@@ -16,4 +17,12 @@ class Reservation extends Model
         'user_id',
         'price',
     ];
+
+    // Связи
+    public function room() {
+        return $this->belongsTo(Room::class);
+    }
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }
