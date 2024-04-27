@@ -7,11 +7,21 @@ use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Requests\User\UserEditRequest;
 use App\Http\Requests\User\UserEditSelfRequest;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserSafeResource;
 use App\Models\Role;
 use App\Models\User;
 
 class UserController extends Controller
 {
+    public function showSelf() {
+        $user = User::find(request()->user()->id);
+        return response(UserSafeResource::make($user));
+    }
+    public function editSelf(UserEditSelfRequest $request) {
+        $user = User::find($request->user()->id);
+
+        return response(null, 204);
+    }
     public function showAll() {
         return response([
             'users' => UserResource::collection(User::all())
@@ -49,11 +59,6 @@ class UserController extends Controller
         }
 
         $user->update($request->all());
-        return response(null, 204);
-    }
-    public function editSelf(UserEditSelfRequest $request) {
-        $user = User::find($request->user()->id);
-
         return response(null, 204);
     }
     public function delete(int $id) {

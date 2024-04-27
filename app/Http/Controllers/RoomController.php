@@ -109,7 +109,7 @@ class RoomController extends Controller
 
         $response['room'] = RoomResource::make($room);
 
-        return response($response, 200);
+        return response($response);
     }
     public function delete(int $id) {
         $room = Room::find($id);

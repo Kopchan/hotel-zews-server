@@ -15,6 +15,8 @@ class UserSafeResource extends JsonResource
             'name'       => $this->name,
             'surname'    => $this->surname,
             'patronymic' => $this->patronymic,
+            'birthday'   => $this->birthday,
+            'sex'        => $this->sex,
         ];
 
         $role = Role::find($this->role_id)->code;

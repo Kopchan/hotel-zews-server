@@ -33,13 +33,16 @@ Route
 ::controller(UserController::class)
 ->prefix('users')
 ->group(function ($users) {
-    $users->middleware('token.auth:user' )->patch('', 'editSelf');
+    $users->middleware('token.auth')->group(function ($currentUser) {
+        $currentUser->get ('self', 'showSelf');
+        $currentUser->post('self', 'editSelf');
+    });
     $users->middleware('token.auth:admin')->group(function ($usersManage) {
         $usersManage->post('', 'create' );
         $usersManage->get ('', 'showAll');
         $usersManage->prefix('{id}')->group(function ($userManage) {
             $userManage->get   ('', 'show'  )->where('id', '[0-9]+');
-            $userManage->patch ('', 'edit'  )->where('id', '[0-9]+');
+            $userManage->post  ('', 'edit'  )->where('id', '[0-9]+');
             $userManage->delete('', 'delete')->where('id', '[0-9]+');
         });
     });
@@ -78,7 +81,7 @@ Route
         ->prefix('{id}')
         ->middleware('token.auth:admin')
         ->group(function ($type) {
-            $type->patch ('', 'edit'  )->where('id', '[0-9]+');
+            $type->post  ('', 'edit'  )->where('id', '[0-9]+');
             $type->delete('', 'delete')->where('id', '[0-9]+');
         });
     });
@@ -93,7 +96,7 @@ Route
     $reservations->post('', 'create' );
     $reservations->prefix('{id}')->group(function ($reservation) {
         $reservation->get   ('', 'show'  )->where('id', '[0-9]+');
-        $reservation->patch ('', 'edit'  )->where('id', '[0-9]+');
+        $reservation->post  ('', 'edit'  )->where('id', '[0-9]+');
         $reservation->delete('', 'delete')->where('id', '[0-9]+');
     });
 });
