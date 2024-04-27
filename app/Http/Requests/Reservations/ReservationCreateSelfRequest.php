@@ -10,7 +10,7 @@ class ReservationCreateSelfRequest extends ApiRequest
     {
         return [
             'entry' => 'required|date|after:now',
-            'exit'  => 'required|date|after:now',
+            'exit'  => 'required|date|after:entry',
         ];
     }
 }
