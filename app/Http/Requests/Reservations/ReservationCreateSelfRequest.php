@@ -9,8 +9,8 @@ class ReservationCreateSelfRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'data_enter' => 'required|date|before:now',
-            'data_exit'  => 'required|date|before:now',
+            'entry' => 'required|date|after:now',
+            'exit'  => 'required|date|after:now',
         ];
     }
 }

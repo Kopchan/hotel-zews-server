@@ -14,15 +14,26 @@ class ReservationController extends Controller
         if (!$room)
             throw new ApiException(404, 'Room not found');
 
+        $entryDate = $request->entry;
+        $endDate   = $request->exit;
+
         $existReservation = Reservation
-            ::where('date_enter', '>=', $request->date_enter)
-            ->where('date_exit' , '<=', $request->date_exit)
+            ::orWhere(function ($q01) use ($entryDate, $endDate) {
+             $q01->where('date_entry', '>=', $entryDate)
+                 ->where('date_exit' , '<=', $endDate);
+            })
+            ->orWhere(function ($q02) use ($entryDate, $endDate) {
+                $q02->where('date_entry', '<=', $entryDate)
+                    ->where('date_exit' , '>=', $entryDate);
+            })
             ->count();
         if ($existReservation)
             throw new ApiException(404, 'Room is already occupied for these dates');
 
         Reservation::create([
-            ...$request->all(),
+            'date_entry' => $request->entry,
+            'date_exit' => $request->exit,
+            'room_id' => $room->id,
             'user_id' => $request->user()->id,
             'price' => $room->price,
         ]);
@@ -34,8 +45,9 @@ class ReservationController extends Controller
             throw new ApiException(404, 'Room not found');
 
         $reservation = Reservation
-            ::where('user_id', request()->user()->id)
-            ->where('date_enter', '>', now())
+            ::where('room_id', $room->id)
+            ->where('user_id', request()->user()->id)
+            ->where('date_entry', '>', now())
             ->first();
         if (!$reservation)
             throw new ApiException(404, 'Reservation not found');

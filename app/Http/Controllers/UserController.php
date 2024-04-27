@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Requests\User\UserEditRequest;
 use App\Http\Requests\User\UserEditSelfRequest;
+use App\Http\Resources\UserAllResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserSafeResource;
 use App\Models\Role;
@@ -33,7 +34,7 @@ class UserController extends Controller
         if (!$user)
             throw new ApiException(404, 'User not found');
 
-        return response($user);
+        return response(UserAllResource::make($user));
     }
     public function create(UserCreateRequest $request) {
         if ($request->role)
