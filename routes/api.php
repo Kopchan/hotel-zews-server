@@ -53,7 +53,6 @@ Route
 ->prefix('rooms')
 ->group(function ($rooms) {
     $rooms->get('', 'showAll');
-    $rooms->get('types', 'showTypes');
     $rooms->middleware('token.auth:admin')->post('', 'create');
     $rooms->prefix('{id}')->group(function ($room) {
         $room->get('', 'show')->where('id', '[0-9]+');
