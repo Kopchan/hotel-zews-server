@@ -29,9 +29,9 @@ class ReservationController extends Controller
 
         $entryDate = $request->entry;
         $exitDate  = $request->exit
-            ? $request->exit
-            : (new \DateTime("$request->entry +$request->nights days"))
-                ->format('Y-m-d');
+        ? $request->exit
+        : (new \DateTime("$request->entry +$request->nights days"))
+            ->format('Y-m-d');
 
         $isCollision = Reservation
         ::where('room_id', $room->id)
