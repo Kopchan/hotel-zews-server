@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\ApiException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,10 @@ class Room extends Model
         'price',
         'type_id',
     ];
+
+    public function loadPhotos($files) {
+        return Photo::LoadArray($files, $this->id);
+    }
 
     // Связи
     public function type() {

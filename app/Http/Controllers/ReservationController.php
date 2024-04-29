@@ -50,7 +50,7 @@ class ReservationController extends Controller
 
         Reservation::create([
             'date_entry' => $entryDate,
-            'date_exit' => $exitDate,
+            'date_exit'  =>  $exitDate,
             'room_id' => $room->id,
             'user_id' => $user->id,
             'price' => $room->price,
