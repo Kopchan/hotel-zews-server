@@ -20,8 +20,8 @@ class UserController extends Controller
     }
     public function editSelf(UserEditSelfRequest $request) {
         $user = User::find($request->user()->id);
-
-        return response(null, 204);
+        $user->update($request->validated());
+        return response($request->validated(), 200);
     }
     public function showAll() {
         return response([
@@ -43,7 +43,7 @@ class UserController extends Controller
             $role = Role::firstOrCreate(['code' => 'user']);
 
         $user = User::create([
-            ...$request->all(),
+            ...$request->validated(),
             'role_id' => $role->id,
         ]);
         return response(UserResource::make($user), 201);
@@ -59,7 +59,7 @@ class UserController extends Controller
             $user->update(['role_id' => $role->id]);
         }
 
-        $user->update($request->all());
+        $user->update($request->validated());
         return response(null, 204);
     }
     public function delete(int $id) {

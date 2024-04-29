@@ -26,7 +26,7 @@ class RoomTypesController extends Controller
         return response($type->name);
     }
     public function create(RoomTypeRequest $request) {
-        $type = RoomType::create($request->all());
+        $type = RoomType::create($request->validated());
 
         return response(null, 204);
     }
@@ -36,7 +36,7 @@ class RoomTypesController extends Controller
         if (!$type)
             throw new ApiException(404, 'Room type not found');
 
-        $type->update($request->all());
+        $type->update($request->validated());
 
         return response(null, 204);
     }

@@ -24,7 +24,7 @@ class RoomController extends Controller
         return response(RoomResource::make($room));
     }
     public function create(RoomCreateRequest $request) {
-        $room = Room::create($request->all());
+        $room = Room::create($request->validated());
         $response = $room->loadPhotos($request->file('photos'));
 
         $response['room'] = RoomResource::make($room);
@@ -36,7 +36,7 @@ class RoomController extends Controller
         if (!$room)
             throw new ApiException(404, 'Room not found');
 
-        $room->update($request->all());
+        $room->update($request->validated());
         $response = $room->loadPhotos($request->file('photos'));
 
         foreach ($request->removePhotos ?? [] as $removePhoto) {
