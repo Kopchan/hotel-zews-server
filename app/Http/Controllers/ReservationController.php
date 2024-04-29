@@ -68,13 +68,14 @@ class ReservationController extends Controller
 
         return response(ReservationResource::make($reservation), 201);
     }
+    /*
     public function edit(ReservationEditRequest $request, int $id) {
         $reservation = Reservation::find($id);
         if (!$reservation)
             throw new ApiException(404, 'Room not found');
 
-        $room->update($request->validated());
-        $response = $room->loadPhotos($request->file('photos'));
+        $reservation->update($request->validated());
+        $response = $reservation->loadPhotos($request->file('photos'));
 
         foreach ($request->removePhotos ?? [] as $removePhoto) {
             $photo = Photo::find($removePhoto);
@@ -96,5 +97,5 @@ class ReservationController extends Controller
 
         $room->delete();
         return response(null, 204);
-    }
+    }*/
 }
