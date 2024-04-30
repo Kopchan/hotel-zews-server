@@ -21,7 +21,7 @@ class UserController extends Controller
     public function editSelf(UserEditSelfRequest $request) {
         $user = User::find($request->user()->id);
         $user->update($request->validated());
-        return response($request->validated(), 200);
+        return response(null, 204);
     }
     public function showAll() {
         return response([

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ApiException;
 use App\Http\Requests\Reservations\ReservationCreateRequest;
 use App\Http\Requests\Reservations\ReservationCreateSelfRequest;
+use App\Http\Requests\Reservations\ReservationEditRequest;
 use App\Http\Requests\Reservations\ReservationFiltersRequest;
 use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
@@ -68,26 +69,18 @@ class ReservationController extends Controller
 
         return response(ReservationResource::make($reservation), 201);
     }
-    /*
     public function edit(ReservationEditRequest $request, int $id) {
         $reservation = Reservation::find($id);
         if (!$reservation)
-            throw new ApiException(404, 'Room not found');
+            throw new ApiException(404, 'Reservation not found');
 
+        $request->merge([
+            'entry' => 'date_entry',
+            'exit'  => 'date_exit',
+        ]);
+        return $request;
         $reservation->update($request->validated());
-        $response = $reservation->loadPhotos($request->file('photos'));
-
-        foreach ($request->removePhotos ?? [] as $removePhoto) {
-            $photo = Photo::find($removePhoto);
-            if ($photo) {
-                $photo->room_id = null;
-                $photo->save();
-            }
-        }
-
-        $response['room'] = RoomResource::make($room);
-
-        return response($response);
+        return response(null, 204);
     }
     public function delete(int $id) {
         $room = Room::find($id);
@@ -97,5 +90,5 @@ class ReservationController extends Controller
 
         $room->delete();
         return response(null, 204);
-    }*/
+    }
 }
