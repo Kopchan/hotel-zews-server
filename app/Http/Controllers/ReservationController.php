@@ -16,7 +16,7 @@ class ReservationController extends Controller
     public function createSelf(ReservationCreateSelfRequest $request, int $roomId) {
         Reservation::validateAndCreate(
             $roomId,
-            $request->user()->id,
+            null,
             $request->entry,
             $request->exit,
             $request->nights,
@@ -62,8 +62,8 @@ class ReservationController extends Controller
         $reservation = Reservation::validateAndCreate(
             $request->room_id,
             $request->user_id,
-            $request->entry,
-            $request->exit,
+            $request->date_entry,
+            $request->date_exit,
             $request->nights,
         );
 
@@ -74,21 +74,15 @@ class ReservationController extends Controller
         if (!$reservation)
             throw new ApiException(404, 'Reservation not found');
 
-        $request->merge([
-            'entry' => 'date_entry',
-            'exit'  => 'date_exit',
-        ]);
-        return $request;
         $reservation->update($request->validated());
         return response(null, 204);
     }
     public function delete(int $id) {
-        $room = Room::find($id);
+        $reservation = Reservation::find($id);
+        if (!$reservation)
+            throw new ApiException(404, 'Reservation not found');
 
-        if (!$room)
-            throw new ApiException(404, 'Room not found');
-
-        $room->delete();
+        $reservation->delete();
         return response(null, 204);
     }
 }

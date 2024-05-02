@@ -2,10 +2,19 @@
 
 namespace App\Http\Requests\Reservations;
 
+use App\Exceptions\ApiException;
 use App\Http\Requests\ApiRequest;
+use App\Models\Reservation;
 
 class ReservationEditRequest extends ApiRequest
 {
+    protected function prepareForValidation()
+    {
+        if (!$this->has('date_entry')) {
+            $reservation = Reservation::find($this->route('id'));
+            $this->merge(['date_entry' => $reservation?->date_entry]);
+        }
+    }
     public function rules(): array
     {
         return [
@@ -17,15 +26,13 @@ class ReservationEditRequest extends ApiRequest
                 'integer',
                 'exists:users,id',
             ],
-            'entry' => [
+            'date_entry' => [
                 'date',
-                'after:now',
-                'before:+'. config('hotel.max_far_book_start') .' days',
             ],
-            'exit' => [
+            'date_exit' => [
                 'date',
                 'after:+1 days,entry',
-                'before:+'. config('hotel.max_book_period') .' days,entry',
+                'before:+'. config('hotel.max_book_period') .' days,date_entry',
             ],
         ];
     }

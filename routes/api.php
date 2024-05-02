@@ -57,8 +57,8 @@ Route
     $rooms->prefix('{id}')->group(function ($room) {
         $room->get('', 'show')->where('id', '[0-9]+');
         $room->middleware('token.auth:admin')->group(function ($roomManage) {
-            $roomManage->post  ('edit', 'edit'  )->where('id', '[0-9]+');
-            $roomManage->delete(''    , 'delete')->where('id', '[0-9]+');
+            $roomManage->post  ('', 'edit'  )->where('id', '[0-9]+');
+            $roomManage->delete('', 'delete')->where('id', '[0-9]+');
         });
         $room
         ->controller(ReservationController::class)

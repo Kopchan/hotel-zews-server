@@ -59,7 +59,7 @@ class Reservation extends Model
             'date_entry' => $entryDate,
             'date_exit'  =>  $exitDate,
             'room_id' => $roomId,
-            'user_id' => $userId,
+            'user_id' => $userId ?? request()->user()->id,
             'price' => $room->price,
         ]);
     }

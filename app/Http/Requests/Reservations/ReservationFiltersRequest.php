@@ -8,7 +8,7 @@ use App\Http\Requests\ApiRequest;
 class ReservationFiltersRequest extends ApiRequest
 {
     protected function prepareForValidation()
-    {;
+    {
         $this->replace([
             'rooms' => $this->rooms ? explode(',', $this->rooms) : [],
             'users' => $this->users ? explode(',', $this->users) : []

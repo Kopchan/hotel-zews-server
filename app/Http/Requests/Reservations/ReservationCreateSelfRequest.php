@@ -9,20 +9,20 @@ class ReservationCreateSelfRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'entry' => [
+            'date_entry' => [
                 'required',
                 'date',
                 'after:now',
                 'before:+'. config('hotel.max_far_book_start') .' days',
             ],
-            'exit' => [
+            'date_exit' => [
                 'required_without:nights',
                 'date',
-                'after:+1 days,entry',
-                'before:+'. config('hotel.max_book_period') .' days,entry',
+                'after:+1 days,date_entry',
+                'before:+'. config('hotel.max_book_period') .' days,date_entry',
             ],
             'nights' => [
-                'required_without:exit',
+                'required_without:date_exit',
                 'integer',
                 'min:1',
                 'max:'. config('hotel.max_book_period'),
