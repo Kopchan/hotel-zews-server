@@ -18,7 +18,7 @@ class Photo extends Model
     ];
 
     public static function LoadArray($files, $roomId = null, $newsId = null) {
-        foreach ($files as $file) {
+        foreach ($files ?? [] as $file) {
             $fileName = $file->getClientOriginalName();
             $fileExt  = $file->extension();
 
