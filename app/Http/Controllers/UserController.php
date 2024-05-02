@@ -14,21 +14,25 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function showSelf() {
+    public function showSelf()
+    {
         $user = User::find(request()->user()->id);
         return response(UserSafeResource::make($user));
     }
-    public function editSelf(UserEditSelfRequest $request) {
+    public function editSelf(UserEditSelfRequest $request)
+    {
         $user = User::find($request->user()->id);
         $user->update($request->validated());
         return response(null, 204);
     }
-    public function showAll() {
+    public function showAll()
+    {
         return response([
             'users' => UserResource::collection(User::all())
         ]);
     }
-    public function show(int $id) {
+    public function show(int $id)
+    {
         $user = User::find($id);
 
         if (!$user)
@@ -36,7 +40,8 @@ class UserController extends Controller
 
         return response(UserAllResource::make($user));
     }
-    public function create(UserCreateRequest $request) {
+    public function create(UserCreateRequest $request)
+    {
         if ($request->role)
             $role = Role::where('code', $request->role)->first();
         else
@@ -48,7 +53,8 @@ class UserController extends Controller
         ]);
         return response(UserResource::make($user), 201);
     }
-    public function edit(UserEditRequest $request, int $id) {
+    public function edit(UserEditRequest $request, int $id)
+    {
         $user = User::find($id);
 
         if (!$user)
@@ -62,7 +68,8 @@ class UserController extends Controller
         $user->update($request->validated());
         return response(null, 204);
     }
-    public function delete(int $id) {
+    public function delete(int $id)
+    {
         $user = User::find($id);
 
         if (!$user)

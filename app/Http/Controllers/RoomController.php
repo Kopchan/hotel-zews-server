@@ -11,19 +11,22 @@ use App\Models\Room;
 
 class RoomController extends Controller
 {
-    public function showAll() {
+    public function showAll()
+    {
         $rooms = Room::with(['reservations', 'photos'])->get();
 
         return response(['rooms' => RoomResource::collection($rooms)]);
     }
-    public function show(int $id) {
+    public function show(int $id)
+    {
         $room = Room::with(['reservations', 'photos'])->find($id);
         if (!$room)
             throw new ApiException(404, 'Room not found');
 
         return response(RoomResource::make($room));
     }
-    public function create(RoomCreateRequest $request) {
+    public function create(RoomCreateRequest $request)
+    {
         $room = Room::create($request->validated());
         $response = $room->loadPhotos($request->file('photos'));
 
@@ -31,7 +34,8 @@ class RoomController extends Controller
 
         return response($response, 201);
     }
-    public function edit(RoomEditRequest $request, int $id) {
+    public function edit(RoomEditRequest $request, int $id)
+    {
         $room = Room::find($id);
         if (!$room)
             throw new ApiException(404, 'Room not found');
@@ -51,7 +55,8 @@ class RoomController extends Controller
 
         return response($response);
     }
-    public function delete(int $id) {
+    public function delete(int $id)
+    {
         $room = Room::find($id);
 
         if (!$room)

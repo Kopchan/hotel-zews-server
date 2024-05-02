@@ -13,7 +13,8 @@ use App\Models\Room;
 
 class ReservationController extends Controller
 {
-    public function createSelf(ReservationCreateSelfRequest $request, int $roomId) {
+    public function createSelf(ReservationCreateSelfRequest $request, int $roomId)
+    {
         Reservation::validateAndCreate(
             $roomId,
             null,
@@ -23,7 +24,8 @@ class ReservationController extends Controller
         );
         return response(null, 204);
     }
-    public function deleteSelf(int $roomId) {
+    public function deleteSelf(int $roomId)
+    {
         $user = request()->user();
 
         $room = Room::find($roomId);
@@ -42,7 +44,8 @@ class ReservationController extends Controller
         return response(null, 204);
     }
 
-    public function showAll(ReservationFiltersRequest $request) {
+    public function showAll(ReservationFiltersRequest $request)
+    {
         $query = Reservation::with(['room', 'user']);
 
         if ($request->users) $query->whereIn('user_id', $request->users);
@@ -50,7 +53,8 @@ class ReservationController extends Controller
 
         return response(['reservations' => ReservationResource::collection($query->get())]);
     }
-    public function show(int $id) {
+    public function show(int $id)
+    {
         $reservation = Reservation::with(['room', 'user'])->find($id);
 
         if (!$reservation)
@@ -58,7 +62,8 @@ class ReservationController extends Controller
 
         return response(ReservationResource::make($reservation));
     }
-    public function create(ReservationCreateRequest $request) {
+    public function create(ReservationCreateRequest $request)
+    {
         $reservation = Reservation::validateAndCreate(
             $request->room_id,
             $request->user_id,
@@ -69,7 +74,8 @@ class ReservationController extends Controller
 
         return response(ReservationResource::make($reservation), 201);
     }
-    public function edit(ReservationEditRequest $request, int $id) {
+    public function edit(ReservationEditRequest $request, int $id)
+    {
         $reservation = Reservation::find($id);
         if (!$reservation)
             throw new ApiException(404, 'Reservation not found');
@@ -77,7 +83,8 @@ class ReservationController extends Controller
         $reservation->update($request->validated());
         return response(null, 204);
     }
-    public function delete(int $id) {
+    public function delete(int $id)
+    {
         $reservation = Reservation::find($id);
         if (!$reservation)
             throw new ApiException(404, 'Reservation not found');

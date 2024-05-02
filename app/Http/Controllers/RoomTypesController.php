@@ -9,7 +9,8 @@ use App\Models\RoomType;
 
 class RoomTypesController extends Controller
 {
-    public function showAll() {
+    public function showAll()
+    {
         $typesFromDB = RoomType::all();
 
         foreach ($typesFromDB as $type)
@@ -17,7 +18,8 @@ class RoomTypesController extends Controller
 
         return response(['roomTypes' => $types ?? []]);
     }
-    public function show(int $id) {
+    public function show(int $id)
+    {
         $type = RoomType::find($id);
 
         if (!$type)
@@ -25,12 +27,14 @@ class RoomTypesController extends Controller
 
         return response($type->name);
     }
-    public function create(RoomTypeRequest $request) {
+    public function create(RoomTypeRequest $request)
+    {
         $type = RoomType::create($request->validated());
 
         return response(null, 204);
     }
-    public function edit(RoomTypeRequest $request, int $id) {
+    public function edit(RoomTypeRequest $request, int $id)
+    {
         $type = RoomType::find($id);
 
         if (!$type)
@@ -40,7 +44,8 @@ class RoomTypesController extends Controller
 
         return response(null, 204);
     }
-    public function delete(int $id) {
+    public function delete(int $id)
+    {
         $type = RoomType::find($id);
 
         if (!$type)
