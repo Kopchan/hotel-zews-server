@@ -20,7 +20,7 @@ class AuthController extends Controller
         $roleId = Role::firstOrCreate(['code' => 'user'])->id;
 
         $user = User::create([
-            ...$request->all(),
+            ...$request->validated(),
             'role_id' => $roleId
         ]);
         $token = $user->generateToken();

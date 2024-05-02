@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reservations', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('room_id')->constrained()->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate();
             $table->date     ('date_entry');
             $table->date     ('date_exit');
             $table->decimal  ('price', 16);
-            $table->boolean  ('is_paid');
+            $table->boolean  ('is_paid')->default(false);
             $table->timestamps();
-
-            $table->primary(['room_id', 'user_id']);
         });
     }
 
