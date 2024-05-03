@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         $user = User::find($request->user()->id);
         $user->update($request->validated());
-        return response(null, 204);
+        return response(UserSafeResource::make($user));
     }
     public function showAll()
     {
@@ -66,7 +66,7 @@ class UserController extends Controller
         }
 
         $user->update($request->validated());
-        return response(null, 204);
+        return response(UserResource::make($user), 204);
     }
     public function delete(int $id)
     {

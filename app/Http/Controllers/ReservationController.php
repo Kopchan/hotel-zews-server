@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ApiException;
-use App\Http\Requests\Reservations\ReservationCreateRequest;
-use App\Http\Requests\Reservations\ReservationCreateSelfRequest;
-use App\Http\Requests\Reservations\ReservationEditRequest;
-use App\Http\Requests\Reservations\ReservationFiltersRequest;
+use App\Http\Requests\Reservation\ReservationCreateRequest;
+use App\Http\Requests\Reservation\ReservationCreateSelfRequest;
+use App\Http\Requests\Reservation\ReservationEditRequest;
+use App\Http\Requests\Reservation\ReservationFiltersRequest;
 use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use App\Models\Room;

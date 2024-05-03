@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Reservations;
+namespace App\Http\Requests\Reservation;
 
 use App\Exceptions\ApiException;
 use App\Http\Requests\ApiRequest;
