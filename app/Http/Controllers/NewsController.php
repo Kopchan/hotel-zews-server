@@ -57,7 +57,6 @@ class NewsController extends Controller
                 $photo->save();
             }
         }
-
         $response['news'] = NewsResource::make($news);
 
         return response($response);

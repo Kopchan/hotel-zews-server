@@ -12,7 +12,7 @@ class NewsResource extends JsonResource
     public function toArray(Request $request): array
     {
         $response = [
-//          'id'      => $this->id,
+            'id'      => $this->id,
             'name'    => $this->name,
             'created' => $this->created_at,
             'text'    => $this->text,

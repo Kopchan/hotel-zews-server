@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Reservations;
+namespace App\Http\Requests\Reservation;
 
 use App\Http\Requests\ApiRequest;
 
