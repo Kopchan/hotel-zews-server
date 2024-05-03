@@ -115,3 +115,18 @@ Route
         });
     });
 });
+
+Route
+::controller(NewsController::class)
+->prefix('news')
+->group(function ($newsList) {
+    $newsList->get('', 'showAll');
+    $newsList->middleware('token.auth:manager')->post('', 'create');
+    $newsList->prefix('{id}')->group(function ($news) {
+        $news->get('', 'show')->where('id', '[0-9]+');
+        $news->middleware('token.auth:manager')->group(function ($roomManage) {
+            $roomManage->post  ('', 'edit'  )->where('id', '[0-9]+');
+            $roomManage->delete('', 'delete')->where('id', '[0-9]+');
+        });
+    });
+});
