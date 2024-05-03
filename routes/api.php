@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomTypesController;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,14 @@ Route
             $reserve->post  ('', 'createSelf')->where('id', '[0-9]+');
             $reserve->delete('', 'deleteSelf')->where('id', '[0-9]+');
         });
+        $room
+        ->controller(ReviewController::class)
+        ->prefix('review')
+        ->middleware('token.auth')
+        ->group(function ($review) {
+            $review->post  ('', 'createSelf')->where('id', '[0-9]+');
+            $review->delete('', 'deleteSelf')->where('id', '[0-9]+');
+        });
     });
     $rooms
     ->controller(RoomTypesController::class)
@@ -117,14 +126,14 @@ Route
 });
 
 Route
-::controller(NewsController::class)
-->prefix('news')
-->group(function ($newsList) {
-    $newsList->get('', 'showAll');
-    $newsList->middleware('token.auth:manager')->post('', 'create');
-    $newsList->prefix('{id}')->group(function ($news) {
-        $news->get('', 'show')->where('id', '[0-9]+');
-        $news->middleware('token.auth:manager')->group(function ($roomManage) {
+::controller(ReviewController::class)
+->prefix('reviews')
+->group(function ($reviews) {
+    $reviews->get('', 'showAll');
+    $reviews->middleware('token.auth:admin')->post('', 'create');
+    $reviews->prefix('{id}')->group(function ($review) {
+        $review->get('', 'show')->where('id', '[0-9]+');
+        $review->middleware('token.auth:manager')->group(function ($roomManage) {
             $roomManage->post  ('', 'edit'  )->where('id', '[0-9]+');
             $roomManage->delete('', 'delete')->where('id', '[0-9]+');
         });

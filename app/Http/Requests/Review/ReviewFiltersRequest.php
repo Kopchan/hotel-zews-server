@@ -21,6 +21,7 @@ class ReviewFiltersRequest extends ApiRequest
             'users' => 'array',
             'rooms.*' => 'integer',
             'users.*' => 'integer',
+            'moderated' => 'boolean',
         ];
     }
 }
