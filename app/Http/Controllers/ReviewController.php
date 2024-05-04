@@ -22,7 +22,7 @@ class ReviewController extends Controller
         if (!$room)
             throw new ApiException(404, 'Room not found');
 
-        $reviewExist = Room
+        $reviewExist = Review
         ::where('user_id', $user->id)
         ->where('room_id', $room->id)
         ->count();
@@ -59,8 +59,9 @@ class ReviewController extends Controller
     {
         $query = Review::with(['room', 'user']);
 
-        if ($request->users) $query->whereIn('user_id', $request->users);
-        if ($request->rooms) $query->whereIn('room_id', $request->rooms);
+        if ($request->users)     $query->whereIn('user_id'     , $request->users);
+        if ($request->rooms)     $query->whereIn('room_id'     , $request->rooms);
+        if ($request->modereted) $query->where  ('is_moderated', $request->modereted);
 
         return response(['reviews' => ReviewResource::collection($query->get())]);
     }
@@ -75,13 +76,14 @@ class ReviewController extends Controller
     }
     public function create(ReviewCreateRequest $request)
     {
-        $review = Review::validateAndCreate(
-            $request->room_id,
-            $request->user_id,
-            $request->date_entry,
-            $request->date_exit,
-            $request->nights,
-        );
+        $reviewExist = Room
+            ::where('user_id', $request->user_id)
+            ->where('room_id', $request->room_id)
+            ->exists();
+        if ($reviewExist)
+            throw new ApiException(404, 'User already reviewed this room');
+
+        $review = Review::create($request->validated());
 
         return response(ReviewResource::make($review), 201);
     }
