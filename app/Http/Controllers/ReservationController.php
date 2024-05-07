@@ -8,6 +8,7 @@ use App\Http\Requests\Reservation\ReservationCreateSelfRequest;
 use App\Http\Requests\Reservation\ReservationEditRequest;
 use App\Http\Requests\Reservation\ReservationFiltersRequest;
 use App\Http\Resources\ReservationResource;
+use App\Http\Resources\ReservationSelfResource;
 use App\Models\Reservation;
 use App\Models\Room;
 
@@ -42,6 +43,16 @@ class ReservationController extends Controller
 
         $reservation->delete();
         return response(null, 204);
+    }
+
+    public function showAllSelf(ReservationFiltersRequest $request)
+    {
+        $query = Reservation::with(['room']);
+
+        if ($request->users) $query->whereIn('user_id', $request->user()->id);
+        if ($request->rooms) $query->whereIn('room_id', $request->rooms);
+
+        return response(['reservations' => ReservationSelfResource::collection($query->get())]);
     }
 
     public function showAll(ReservationFiltersRequest $request)

@@ -99,14 +99,17 @@ Route
 Route
 ::controller(ReservationController::class)
 ->prefix('reservations')
-->middleware('token.auth:admin')
-->group(function ($reservations) {
-    $reservations->get ('', 'showAll');
-    $reservations->post('', 'create' );
-    $reservations->prefix('{id}')->group(function ($reservation) {
-        $reservation->get   ('', 'show'  )->where('id', '[0-9]+');
-        $reservation->post  ('', 'edit'  )->where('id', '[0-9]+');
-        $reservation->delete('', 'delete')->where('id', '[0-9]+');
+->middleware('token.auth')
+->group(function ($reserves) {
+    $reserves->get('my', 'showAllSelf');
+    $reserves->middleware('token.auth:admin')->group(function ($reservesManage) {
+        $reservesManage->get ('', 'showAll');
+        $reservesManage->post('', 'create' );
+        $reservesManage->prefix('{id}')->group(function ($reserve) {
+            $reserve->get   ('', 'show'  )->where('id', '[0-9]+');
+            $reserve->post  ('', 'edit'  )->where('id', '[0-9]+');
+            $reserve->delete('', 'delete')->where('id', '[0-9]+');
+        });
     });
 });
 
