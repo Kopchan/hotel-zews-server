@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId  ('room_id')->constrained()->cascadeOnUpdate();
-            $table->foreignId  ('user_id')->constrained()->cascadeOnUpdate();
+            $table->foreignId  ('room_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId  ('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->text       ('text');
             $table->tinyInteger('grade');
             $table->timestamps();

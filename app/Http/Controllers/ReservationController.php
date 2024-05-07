@@ -49,7 +49,7 @@ class ReservationController extends Controller
     {
         $query = Reservation::with(['room']);
 
-        if ($request->users) $query->whereIn('user_id', $request->user()->id);
+        if ($request->users) $query->where  ('user_id', $request->user()->id);
         if ($request->rooms) $query->whereIn('room_id', $request->rooms);
 
         return response(['reservations' => ReservationSelfResource::collection($query->get())]);
