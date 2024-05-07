@@ -18,8 +18,8 @@ class ReservationController extends Controller
         Reservation::validateAndCreate(
             $roomId,
             null,
-            $request->entry,
-            $request->exit,
+            $request->date_entry,
+            $request->date_exit,
             $request->nights,
         );
         return response(null, 204);
