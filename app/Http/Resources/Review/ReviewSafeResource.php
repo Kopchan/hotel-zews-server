@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Review;
 
+use App\Http\Resources\Room\RoomResource;
+use App\Http\Resources\User\UserPrivateResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReviewSelfResource extends JsonResource
+class ReviewSafeResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -14,7 +16,7 @@ class ReviewSelfResource extends JsonResource
             'created' => $this->created_at,
             'grade'   => $this->grade,
             'text'    => $this->text,
-            'user'    => 'you',
+            'user'    => UserPrivateResource::make($this->user),
             'room'    => RoomResource::make($this->room),
         ];
     }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ApiException;
 use App\Http\Requests\Room\RoomCreateRequest;
 use App\Http\Requests\Room\RoomEditRequest;
-use App\Http\Resources\RoomResource;
+use App\Http\Resources\Room\RoomResource;
 use App\Models\Photo;
 use App\Models\Room;
 

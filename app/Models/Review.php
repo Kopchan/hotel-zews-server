@@ -14,6 +14,7 @@ class Review extends Model
         'room_id',
         'grade',
         'text',
+        'is_moderated'
     ];
 
     // Связи

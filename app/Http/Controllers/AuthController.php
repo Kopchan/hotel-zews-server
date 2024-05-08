@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ApiException;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\SignupRequest;
-use App\Http\Resources\UserSafeResource;
+use App\Http\Resources\User\UserSafeResource;
 use App\Models\Role;
 use App\Models\Token;
 use App\Models\User;

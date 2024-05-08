@@ -7,8 +7,8 @@ use App\Http\Requests\Reservation\ReservationCreateRequest;
 use App\Http\Requests\Reservation\ReservationCreateSelfRequest;
 use App\Http\Requests\Reservation\ReservationEditRequest;
 use App\Http\Requests\Reservation\ReservationFiltersRequest;
-use App\Http\Resources\ReservationResource;
-use App\Http\Resources\ReservationSelfResource;
+use App\Http\Resources\Reservation\ReservationResource;
+use App\Http\Resources\Reservation\ReservationSelfResource;
 use App\Models\Reservation;
 use App\Models\Room;
 

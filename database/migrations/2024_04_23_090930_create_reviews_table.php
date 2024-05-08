@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId  ('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->text       ('text');
             $table->tinyInteger('grade');
+            $table->boolean    ('is_moderated')->default(false);
             $table->timestamps();
         });
     }

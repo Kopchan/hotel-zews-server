@@ -131,9 +131,10 @@ Route
 Route
 ::controller(ReviewController::class)
 ->prefix('reviews')
+->middleware('token.auth:admin')
 ->group(function ($reviews) {
     $reviews->get('', 'showAll');
-    $reviews->middleware('token.auth:admin')->post('', 'create');
+    $reviews->post('', 'create');
     $reviews->prefix('{id}')->group(function ($review) {
         $review->get('', 'show')->where('id', '[0-9]+');
         $review->middleware('token.auth:manager')->group(function ($roomManage) {

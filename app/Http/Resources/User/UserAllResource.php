@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\User;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -11,6 +11,7 @@ class UserAllResource extends JsonResource
     public function toArray(Request $request): array
     {
         $response = [
+            'FIO'        => $this->getFIO(),
             'id'         => $this->id,
             'phone'      => $this->phone,
             'name'       => $this->name,

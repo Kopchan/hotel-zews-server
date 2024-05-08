@@ -6,9 +6,9 @@ use App\Exceptions\ApiException;
 use App\Http\Requests\News\NewsCreateRequest;
 use App\Http\Requests\News\NewsEditRequest;
 use App\Http\Requests\News\NewsFiltersRequest;
-use App\Http\Resources\NewsResource;
-use App\Models\Photo;
+use App\Http\Resources\News\NewsResource;
 use App\Models\News;
+use App\Models\Photo;
 use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller

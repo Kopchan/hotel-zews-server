@@ -23,6 +23,13 @@ class ReviewCreateRequest extends ApiRequest
                 'required',
                 'string',
             ],
+            'grade' => [
+                'required',
+                'string',
+            ],
+            'is_moderated' => [
+                'boolean'
+            ]
         ];
     }
 }

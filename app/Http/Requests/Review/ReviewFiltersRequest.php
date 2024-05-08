@@ -9,7 +9,7 @@ class ReviewFiltersRequest extends ApiRequest
 {
     protected function prepareForValidation()
     {
-        $this->replace([
+        $this->merge([
             'rooms' => $this->rooms ? explode(',', $this->rooms) : [],
             'users' => $this->users ? explode(',', $this->users) : []
         ]);

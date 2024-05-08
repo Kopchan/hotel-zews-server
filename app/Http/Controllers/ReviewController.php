@@ -7,8 +7,8 @@ use App\Http\Requests\Review\ReviewCreateRequest;
 use App\Http\Requests\Review\ReviewCreateSelfRequest;
 use App\Http\Requests\Review\ReviewEditRequest;
 use App\Http\Requests\Review\ReviewFiltersRequest;
-use App\Http\Resources\ReviewResource;
-use App\Http\Resources\ReviewSelfResource;
+use App\Http\Resources\Review\ReviewResource;
+use App\Http\Resources\Review\ReviewSelfResource;
 use App\Models\Review;
 use App\Models\Room;
 
@@ -57,11 +57,13 @@ class ReviewController extends Controller
 
     public function showAll(ReviewFiltersRequest $request)
     {
-        $query = Review::with(['room', 'user']);
+        $query = Review
+            ::with(['room', 'user'])
+            ->orderBy('is_moderated');
 
         if ($request->users)     $query->whereIn('user_id'     , $request->users);
         if ($request->rooms)     $query->whereIn('room_id'     , $request->rooms);
-        if ($request->modereted) $query->where  ('is_moderated', $request->modereted);
+        if ($request->moderated) $query->where  ('is_moderated', $request->moderated);
 
         return response(['reviews' => ReviewResource::collection($query->get())]);
     }
@@ -76,12 +78,11 @@ class ReviewController extends Controller
     }
     public function create(ReviewCreateRequest $request)
     {
-        $reviewExist = Room
+        if (Review
             ::where('user_id', $request->user_id)
             ->where('room_id', $request->room_id)
-            ->exists();
-        if ($reviewExist)
-            throw new ApiException(404, 'User already reviewed this room');
+            ->exists()
+        ) throw new ApiException(404, 'User already reviewed this room');
 
         $review = Review::create($request->validated());
 
@@ -94,7 +95,7 @@ class ReviewController extends Controller
             throw new ApiException(404, 'Review not found');
 
         $review->update($request->validated());
-        return response(null, 204);
+        return response([$review, $request->validated()], 200);
     }
     public function delete(int $id)
     {

@@ -26,14 +26,15 @@ class ReviewEditRequest extends ApiRequest
                 'integer',
                 'exists:users,id',
             ],
-            'date_entry' => [
-                'date',
+            'text' => [
+                'string',
             ],
-            'date_exit' => [
-                'date',
-                'after:+1 days,entry',
-                'before:+'. config('hotel.max_book_period') .' days,date_entry',
+            'grade' => [
+                'string',
             ],
+            'is_moderated' => [
+                'boolean'
+            ]
         ];
     }
 }
