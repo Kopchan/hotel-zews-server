@@ -27,7 +27,7 @@ class ReviewController extends Controller
         ->where('room_id', $room->id)
         ->count();
         if ($reviewExist)
-            throw new ApiException(404, 'You already reviewed this room');
+            throw new ApiException(409, 'You already reviewed this room');
 
         $review = Review::create([
             ...$request->validated(),
@@ -82,7 +82,7 @@ class ReviewController extends Controller
             ::where('user_id', $request->user_id)
             ->where('room_id', $request->room_id)
             ->exists()
-        ) throw new ApiException(404, 'User already reviewed this room');
+        ) throw new ApiException(409, 'User already reviewed this room');
 
         $review = Review::create($request->validated());
 

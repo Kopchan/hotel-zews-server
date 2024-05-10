@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
         $roleUserId    = Role::firstOrCreate(['code' => 'user'   ])->id;
 
         User::create([
-            'phone'      => 9_888_777_6655,
-            'password'   => 'admin123',
+            'phone'      => 8_888_777_6655,
+            'password'   => '123123123',
             'name'       => 'Админ',
             'surname'    => 'Админов',
             'patronymic' => 'Админович',
@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleManagerId
         ]);
         User::create([
-            'phone'      => 9_876_543_2100,
+            'phone'      => 8_876_543_2100,
             'password'   => 'test1234',
             'name'       => 'Тест',
             'surname'    => 'Тестова',
@@ -69,8 +69,8 @@ class DatabaseSeeder extends Seeder
 
         $roomType1Room     = RoomType::firstOrCreate(['name' => '1-комнатная'  ])->id;
         $roomType2Room     = RoomType::firstOrCreate(['name' => '2-комнатная'  ])->id;
-        $roomUserLuxury    = RoomType::firstOrCreate(['name' => 'Люкс'         ])->id;
-        $roomUserPresident = RoomType::firstOrCreate(['name' => 'Презедентский'])->id;
+        $roomTypeLuxury    = RoomType::firstOrCreate(['name' => 'Люкс'         ])->id;
+        $roomTypePresident = RoomType::firstOrCreate(['name' => 'Презедентский'])->id;
 
         Room::create([
             'name' => 'Не роскошная',
@@ -88,13 +88,13 @@ class DatabaseSeeder extends Seeder
             'name' => 'Типа почти крутая',
             'description' => 'Люксом так и пахнет в этом номере',
             'price' => '6000',
-            'type_id' => $roomUserLuxury,
+            'type_id' => $roomTypeLuxury,
         ]);
         Room::create([
             'name' => 'Для крутышек',
             'description' => 'Есть отдельный бассейн, открытая зона и много всего',
             'price' => '15000',
-            'type_id' => $roomUserPresident,
+            'type_id' => $roomTypePresident,
         ]);
 
         Cache::flush();

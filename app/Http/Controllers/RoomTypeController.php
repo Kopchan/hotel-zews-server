@@ -7,7 +7,7 @@ use \App\Http\Requests\Room\RoomTypeRequest;
 use App\Models\Room;
 use App\Models\RoomType;
 
-class RoomTypesController extends Controller
+class RoomTypeController extends Controller
 {
     public function showAll()
     {
