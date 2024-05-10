@@ -22,7 +22,7 @@ class ReservationCreateRequest extends ApiRequest
             'date_entry' => [
                 'required',
                 'date',
-                'after:now',
+                'after:now -1 days',
                 'before:+'. config('hotel.max_far_book_start') .' days',
             ],
             'date_exit' => [

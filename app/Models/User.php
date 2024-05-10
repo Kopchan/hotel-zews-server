@@ -51,6 +51,15 @@ class User extends Authenticatable
         }
         return $user;
     }
+    public function getFIO(): string
+    {
+        return $this->name ." "
+            . mb_substr($this->surname, 0, 1) . "."
+            . ($this->patronymic
+                ? mb_substr($this->patronymic, 0, 1) . "."
+                : ''
+            );
+    }
 
     // Генерация токена
     public function generateToken(): string

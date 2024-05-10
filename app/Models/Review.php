@@ -8,4 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'room_id',
+        'grade',
+        'text',
+        'is_moderated'
+    ];
+
+    // Связи
+    public function room() {
+        return $this->belongsTo(Room::class);
+    }
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

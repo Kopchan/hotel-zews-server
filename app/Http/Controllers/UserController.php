@@ -6,9 +6,9 @@ use App\Exceptions\ApiException;
 use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Requests\User\UserEditRequest;
 use App\Http\Requests\User\UserEditSelfRequest;
-use App\Http\Resources\UserAllResource;
-use App\Http\Resources\UserResource;
-use App\Http\Resources\UserSafeResource;
+use App\Http\Resources\User\UserAllResource;
+use App\Http\Resources\User\UserResource;
+use App\Http\Resources\User\UserSafeResource;
 use App\Models\Role;
 use App\Models\User;
 
