@@ -16,8 +16,7 @@ class ReviewSafeResource extends JsonResource
             'created' => $this->created_at,
             'grade'   => $this->grade,
             'text'    => $this->text,
-            'user'    => UserPrivateResource::make($this->user),
-            'room'    => RoomResource::make($this->room),
+            'user'    => $this->user->getFIO(),
         ];
     }
 }

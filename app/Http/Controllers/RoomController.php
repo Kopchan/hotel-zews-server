@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Http\Requests\Room\RoomCreateRequest;
 use App\Http\Requests\Room\RoomEditRequest;
 use App\Http\Requests\Room\RoomFilterRequest;
+use App\Http\Resources\Room\RoomAllResource;
 use App\Http\Resources\Room\RoomResource;
 use App\Models\Photo;
 use App\Models\Reservation;
@@ -52,11 +53,16 @@ class RoomController extends Controller
     }
     public function show(int $id)
     {
-        $room = Room::with(['reservations', 'photos', 'reviews'])->find($id);
+        $room = Room
+            ::query()
+            ->selectRaw('rooms.*, avg(reviews.grade) as avg_grade, count(reviews.id) as reviews_count')
+            ->join('reviews', 'rooms.id', 'reviews.room_id')
+            ->groupBy('rooms.id')
+            ->find($id);
         if (!$room)
             throw new ApiException(404, 'Room not found');
 
-        return response(RoomResource::make($room));
+        return response(RoomAllResource::make($room));
     }
     public function create(RoomCreateRequest $request)
     {
