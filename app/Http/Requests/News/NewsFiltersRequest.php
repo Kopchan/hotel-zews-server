@@ -9,7 +9,8 @@ class NewsFiltersRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'cut' => 'integer|min:1',
+            'cut'   => 'integer|min:1',
+            'limit' => 'integer|min:1'
         ];
     }
 }

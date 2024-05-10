@@ -12,6 +12,7 @@ class ServiceItem extends Model
     protected $fillable = [
         'name',
         'price',
+        'service_id',
     ];
 
     // Связи

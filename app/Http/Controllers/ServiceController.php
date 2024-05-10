@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ApiException;
 use App\Http\Requests\Service\ServiceCreateRequest;
+use App\Http\Requests\Service\ServiceEditRequest;
 use App\Http\Resources\Service\ServiceResource;
 use App\Models\Photo;
 use App\Models\Service;
@@ -45,7 +46,7 @@ class ServiceController extends Controller
         }
         return response(ServiceResource::make($service), 201);
     }
-    public function edit(ServiceCreateRequest $request, $id)
+    public function edit(ServiceEditRequest $request, $id)
     {
         $service = Service::with('items')->find($id);
         if (!$service)
@@ -67,5 +68,14 @@ class ServiceController extends Controller
             $service->save();
         }
         return response(ServiceResource::make($service));
+    }
+    public function delete($id)
+    {
+        $service = Service::with('items')->find($id);
+        if (!$service)
+            throw new ApiException(404, 'Service not found');
+
+        $service->delete();
+        return response(null, 204);
     }
 }

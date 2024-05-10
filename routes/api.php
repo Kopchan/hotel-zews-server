@@ -158,16 +158,16 @@ Route
             $servicesManage->post  ('', 'edit'  )->where('id', '[0-9]+');
             $servicesManage->delete('', 'delete')->where('id', '[0-9]+');
         });
-    });
-    $services
-    ->controller(ServiceItemController::class)
-    ->prefix('items')
-    ->middleware('token.auth:manager')
-    ->group(function ($servicesItems) {
-        $servicesItems->post('', 'create');
-        $servicesItems->prefix('{itemId}')->group(function ($items) {
-            $items->post  ('', 'edit'  )->where('id', '[0-9]+');
-            $items->delete('', 'delete')->where('id', '[0-9]+');
-        });
+        $service
+            ->controller(ServiceItemController::class)
+            ->prefix('items')
+            ->middleware('token.auth:manager')
+            ->group(function ($servicesItems) {
+                $servicesItems->post('', 'create');
+                $servicesItems->prefix('{itemId}')->group(function ($items) {
+                    $items->post  ('', 'edit'  )->where('id', '[0-9]+');
+                    $items->delete('', 'delete')->where('id', '[0-9]+');
+                });
+            });
     });
 });

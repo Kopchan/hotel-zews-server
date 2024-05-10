@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('service_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string   ('name', 128)->unique();
-            $table->text     ('description');
+            $table->string   ('name', 128);
             $table->decimal  ('price', 16);
             $table->timestamps();
 
