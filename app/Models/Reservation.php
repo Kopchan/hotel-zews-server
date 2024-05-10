@@ -40,19 +40,8 @@ class Reservation extends Model
             (new \DateTime("$entryDate +$nights days"))
             ->format('Y-m-d');
 
-        $isCollision = Reservation
-            ::where('room_id', $roomId)
-            ->where(function ($q) use ($entryDate, $exitDate) {
-                $q->orWhere(function ($q01) use ($entryDate, $exitDate) {
-                    $q01->where('date_entry', '>=', $entryDate)
-                        ->where('date_exit' , '<=', $exitDate);
-                })->orWhere(function ($q02) use ($entryDate, $exitDate) {
-                    $q02->where('date_entry', '<=', $exitDate)
-                        ->where('date_exit' , '>=', $entryDate);
-                });
-            })
-            ->count();
-        if ($isCollision)
+
+        if (Reservation::GetInRoomOnDateInterval($roomId, $entryDate, $exitDate))
             throw new ApiException(400, 'Room is already occupied for these dates');
 
         return Reservation::create([
@@ -62,6 +51,19 @@ class Reservation extends Model
             'user_id' => $userId ?? request()->user()->id,
             'price' => $room->price,
         ]);
+    }
+    public static function GetInRoomOnDateInterval($roomId, $entryDate, $exitDate) {
+        return Reservation::query()
+        ->where('room_id', $roomId)
+        ->where(function ($q) use ($entryDate, $exitDate) {
+            $q->where(function ($q01) use ($entryDate, $exitDate) {
+                $q01->where('date_entry', '>=', $entryDate)
+                    ->where('date_exit' , '<=', $exitDate);
+            })->orWhere(function ($q02) use ($entryDate, $exitDate) {
+                $q02->where('date_entry', '<=', $exitDate)
+                    ->where('date_exit' , '>=', $entryDate);
+            });
+        })->get();
     }
 
     // Связи
