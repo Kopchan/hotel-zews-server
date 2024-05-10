@@ -16,6 +16,8 @@ class RoomResource extends JsonResource
             'price'       => $this->price,
             'type'        => $this->type->name,
         ];
+        if ($this->avg_grade)     $response['avg_grade']     = $this->avg_grade;
+        if ($this->reviews_count) $response['reviews_count'] = $this->reviews_count;
         if (count($this->reservations)) {
             $currentDate = new \DateTime(now());
             $days = 0;

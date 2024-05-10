@@ -48,7 +48,6 @@ class RoomController extends Controller
             : 'asc'
         );
         $query->orderBy($sort, $reverse);
-        return $query->get();
         return response(['rooms' => RoomResource::collection($query->get())]);
     }
     public function show(int $id)
