@@ -6,11 +6,18 @@ use App\Http\Requests\ApiRequest;
 
 class RoomFilterRequest extends ApiRequest
 {
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'types' => $this->types ? explode(',', $this->types) : [],
+        ]);
+    }
     public function rules(): array
     {
         return [
             'limit' => 'integer',
             'types' => 'array',
+            'types.*' => 'integer',
             'sort'  => 'string', // price|type|grade
             'date_entry' => [
                 'date',
@@ -24,7 +31,7 @@ class RoomFilterRequest extends ApiRequest
                 'after:+1 days,date_entry',
                 'before:+'. config('hotel.max_book_period') .' days,date_entry',
             ],
-            'reverse' => 'nullable'
+            'reverse' => 'nullable',
         ];
     }
 }
