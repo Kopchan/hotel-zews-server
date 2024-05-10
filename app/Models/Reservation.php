@@ -41,7 +41,7 @@ class Reservation extends Model
             ->format('Y-m-d');
 
 
-        if (Reservation::GetInRoomOnDateInterval($roomId, $entryDate, $exitDate))
+        if (count(Reservation::GetInRoomOnDateInterval($roomId, $entryDate, $exitDate)))
             throw new ApiException(400, 'Room is already occupied for these dates');
 
         return Reservation::create([
@@ -56,7 +56,7 @@ class Reservation extends Model
         return Reservation::query()
         ->where('room_id', $roomId)
         ->where(function ($q) use ($entryDate, $exitDate) {
-            $q->where(function ($q01) use ($entryDate, $exitDate) {
+            $q->orWhere(function ($q01) use ($entryDate, $exitDate) {
                 $q01->where('date_entry', '>=', $entryDate)
                     ->where('date_exit' , '<=', $exitDate);
             })->orWhere(function ($q02) use ($entryDate, $exitDate) {

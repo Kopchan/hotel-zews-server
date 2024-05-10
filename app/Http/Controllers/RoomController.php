@@ -8,26 +8,38 @@ use App\Http\Requests\Room\RoomEditRequest;
 use App\Http\Requests\Room\RoomFilterRequest;
 use App\Http\Resources\Room\RoomResource;
 use App\Models\Photo;
+use App\Models\Reservation;
 use App\Models\Room;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
     public function showAll(RoomFilterRequest $request)
     {
-        $query = Room::query()
-            ->leftJoin('reservations', 'reservations.room_id',  'rooms.id')
-//            ->join('photos',       'photos.room_id',        'rooms.id')
-//            ->join('reviews',      'reviews.room_id',       'rooms.id')
-            ->selectRaw('rooms.*')
-//            ->groupBy('rooms.name')
-            ;
-//        if ($request->limit     ) $query->limit($request->limit);
-//        if ($request->date_entry) $query->where();
-//        if ($request->date_exit ) $query->where();
+        $query = Room::query();
+        $query->selectRaw('rooms.*, avg(reviews.grade) as avg_grade, count(reviews.id) as reviews_count');
+        $query->join('reviews', 'rooms.id', 'reviews.room_id');
+        $query->groupBy('rooms.id');
 
-        if ($request->date)
-
-        $sort = (in_array($request->sort, ['price', 'avg_grade', 'type'])
+        if ($request->limit) $query->limit($request->limit);
+        if ($request->date_entry) {
+            $entryDate = $request->date_entry;
+            $exitDate = $request->date_exit;
+            $RoomsWithCollision = Reservation::query()
+                ->where(function ($q) use ($entryDate, $exitDate) {
+                    $q->orWhere(function ($q01) use ($entryDate, $exitDate) {
+                        $q01->where('date_entry', '>=', $entryDate)
+                            ->where('date_exit' , '<=', $exitDate);
+                    })->orWhere(function ($q02) use ($entryDate, $exitDate) {
+                        $q02->where('date_entry', '<=', $exitDate)
+                            ->where('date_exit' , '>=', $entryDate);
+                    });
+                })
+                ->pluck('room_id')
+                ->toArray();
+            $query->whereNotIn('id', $RoomsWithCollision);
+        }
+        $sort = (in_array($request->sort, ['price', 'avg_grade', 'reviews_count', 'type'])
             ? $request->sort
             : 'avg_grade'
         );
@@ -35,9 +47,7 @@ class RoomController extends Controller
             ? 'desc'
             : 'asc'
         );
-       // $query->orderBy($sort, $reverse);
-
-//        return $query->toSql();
+        $query->orderBy($sort, $reverse);
         return $query->get();
         return response(['rooms' => RoomResource::collection($query->get())]);
     }
