@@ -14,7 +14,7 @@ class ServiceItemCreateRequest extends ApiRequest
             'name'  => [
                 'required',
                 'string',
-                'max:64',
+                'max:128',
                 Rule::unique('service_items')->where(fn (Builder $query) =>
                     $query->where('service_id', request('id')))
             ],
