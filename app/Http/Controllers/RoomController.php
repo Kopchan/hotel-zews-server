@@ -19,13 +19,13 @@ class RoomController extends Controller
     {
         $query = Room::query();
         $query->selectRaw('rooms.*, avg(reviews.grade) as avg_grade, count(reviews.id) as reviews_count');
-        $query->join('reviews', 'rooms.id', 'reviews.room_id');
+        $query->leftJoin('reviews', 'rooms.id', 'reviews.room_id');
         $query->groupBy('rooms.id');
 
         if ($request->limit) $query->limit($request->limit);
         if ($request->date_entry) {
             $entryDate = $request->date_entry;
-            $exitDate = $request->date_exit;
+            $exitDate  = $request->date_exit;
             $RoomsWithCollision = Reservation::query()
                 ->where(function ($q) use ($entryDate, $exitDate) {
                     $q->orWhere(function ($q01) use ($entryDate, $exitDate) {
