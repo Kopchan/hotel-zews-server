@@ -4,7 +4,9 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\RoomTypesController;
+use App\Http\Controllers\RoomTypeController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ServiceItemController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -80,7 +82,7 @@ Route
         });
     });
     $rooms
-    ->controller(RoomTypesController::class)
+    ->controller(RoomTypeController::class)
     ->prefix('types')
     ->group(function ($roomTypes) {
         $roomTypes->get('', 'showAll');
@@ -121,9 +123,9 @@ Route
     $newsList->middleware('token.auth:manager')->post('', 'create');
     $newsList->prefix('{id}')->group(function ($news) {
         $news->get('', 'show')->where('id', '[0-9]+');
-        $news->middleware('token.auth:manager')->group(function ($roomManage) {
-            $roomManage->post  ('', 'edit'  )->where('id', '[0-9]+');
-            $roomManage->delete('', 'delete')->where('id', '[0-9]+');
+        $news->middleware('token.auth:manager')->group(function ($newsManage) {
+            $newsManage->post  ('', 'edit'  )->where('id', '[0-9]+');
+            $newsManage->delete('', 'delete')->where('id', '[0-9]+');
         });
     });
 });
@@ -137,9 +139,35 @@ Route
     $reviews->post('', 'create');
     $reviews->prefix('{id}')->group(function ($review) {
         $review->get('', 'show')->where('id', '[0-9]+');
-        $review->middleware('token.auth:manager')->group(function ($roomManage) {
-            $roomManage->post  ('', 'edit'  )->where('id', '[0-9]+');
-            $roomManage->delete('', 'delete')->where('id', '[0-9]+');
+        $review->middleware('token.auth:manager')->group(function ($reviewManage) {
+            $reviewManage->post  ('', 'edit'  )->where('id', '[0-9]+');
+            $reviewManage->delete('', 'delete')->where('id', '[0-9]+');
         });
+    });
+});
+
+Route
+::controller(ServiceController::class)
+->prefix('services')
+->group(function ($services) {
+    $services->get('', 'showAll');
+    $services->middleware('token.auth:admin')->post('', 'create');
+    $services->prefix('{id}')->group(function ($service) {
+        $service->get('', 'show')->where('id', '[0-9]+');
+        $service->middleware('token.auth:admin')->group(function ($servicesManage) {
+            $servicesManage->post  ('', 'edit'  )->where('id', '[0-9]+');
+            $servicesManage->delete('', 'delete')->where('id', '[0-9]+');
+        });
+        $service
+            ->controller(ServiceItemController::class)
+            ->prefix('items')
+            ->middleware('token.auth:manager')
+            ->group(function ($servicesItems) {
+                $servicesItems->post('', 'create');
+                $servicesItems->prefix('{itemId}')->group(function ($items) {
+                    $items->post  ('', 'edit'  )->where('id', '[0-9]+');
+                    $items->delete('', 'delete')->where('id', '[0-9]+');
+                });
+            });
     });
 });

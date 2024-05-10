@@ -15,9 +15,12 @@ class NewsController extends Controller
 {
     public function showAll(NewsFiltersRequest $request)
     {
-        $query = News::with('photos');
+        $query = News
+            ::with('photos')
+            ->orderByDesc('created_at');
 
-        if ($request->cut) $query->select(
+        if ($request->limit) $query->limit($request->limit);
+        if ($request->cut)   $query->select(
             DB::raw('*'),
             DB::raw("SUBSTRING(text, 1, $request->cut) AS text")
         );
