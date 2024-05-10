@@ -22,8 +22,7 @@ class RoomController extends Controller
         $query->leftJoin('reviews', 'rooms.id', 'reviews.room_id');
         $query->groupBy('rooms.id');
 
-        $query->whereIn('type_id', $request->types);
-
+        if ($request->types) $query->whereIn('type_id', $request->types);
         if ($request->limit) $query->limit($request->limit);
         if ($request->date_entry) {
             $entryDate = $request->date_entry;
