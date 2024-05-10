@@ -58,7 +58,7 @@ class RoomController extends Controller
         $room = Room
             ::query()
             ->selectRaw('rooms.*, avg(reviews.grade) as avg_grade, count(reviews.id) as reviews_count')
-            ->join('reviews', 'rooms.id', 'reviews.room_id')
+            ->leftJoin('reviews', 'rooms.id', 'reviews.room_id')
             ->groupBy('rooms.id')
             ->find($id);
         if (!$room)
