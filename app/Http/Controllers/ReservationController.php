@@ -47,9 +47,10 @@ class ReservationController extends Controller
 
     public function showAllSelf(ReservationFiltersRequest $request)
     {
-        $query = Reservation::with(['room']);
+        $query = Reservation
+            ::with(['room'])
+            ->where('user_id', $request->user()->id);
 
-        if ($request->users) $query->where  ('user_id', $request->user()->id);
         if ($request->rooms) $query->whereIn('room_id', $request->rooms);
 
         return response(['reservations' => ReservationSelfResource::collection($query->get())]);
