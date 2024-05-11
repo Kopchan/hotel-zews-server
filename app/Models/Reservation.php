@@ -44,12 +44,17 @@ class Reservation extends Model
         if (count(Reservation::GetInRoomOnDateInterval($roomId, $entryDate, $exitDate)))
             throw new ApiException(400, 'Room is already occupied for these dates');
 
+        $days = date_diff(
+            date_create($entryDate),
+            date_create($exitDate),
+        )->days + (config('hotel.is_price_counts_by_days') ? 1 : 0);
+
         return Reservation::create([
             'date_entry' => $entryDate,
             'date_exit'  =>  $exitDate,
             'room_id' => $roomId,
             'user_id' => $userId ?? request()->user()->id,
-            'price' => $room->price,
+            'price' => $room->price * $days,
         ]);
     }
     public static function GetInRoomOnDateInterval($roomId, $entryDate, $exitDate) {

@@ -16,14 +16,14 @@ class ReservationController extends Controller
 {
     public function createSelf(ReservationCreateSelfRequest $request, int $roomId)
     {
-        Reservation::validateAndCreate(
+        $result = Reservation::validateAndCreate(
             $roomId,
             null,
             $request->date_entry,
             $request->date_exit,
             $request->nights,
         );
-        return response(null, 204);
+        return response(ReservationSelfResource::make($result), 201);
     }
     public function deleteSelf(int $roomId)
     {

@@ -7,6 +7,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomTypeController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceItemController;
+use App\Http\Controllers\StatsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -159,15 +160,23 @@ Route
             $servicesManage->delete('', 'delete')->where('id', '[0-9]+');
         });
         $service
-            ->controller(ServiceItemController::class)
-            ->prefix('items')
-            ->middleware('token.auth:manager')
-            ->group(function ($servicesItems) {
-                $servicesItems->post('', 'create');
-                $servicesItems->prefix('{itemId}')->group(function ($items) {
-                    $items->post  ('', 'edit'  )->where('id', '[0-9]+');
-                    $items->delete('', 'delete')->where('id', '[0-9]+');
-                });
+        ->controller(ServiceItemController::class)
+        ->prefix('items')
+        ->middleware('token.auth:manager')
+        ->group(function ($servicesItems) {
+            $servicesItems->post('', 'create');
+            $servicesItems->prefix('{itemId}')->group(function ($items) {
+                $items->post  ('', 'edit'  )->where('id', '[0-9]+');
+                $items->delete('', 'delete')->where('id', '[0-9]+');
             });
+        });
     });
+});
+
+Route
+::controller(StatsController::class)
+->prefix('stats')
+->middleware('token.auth:admin')
+->group(function ($services) {
+    $services->get('', 'show');
 });

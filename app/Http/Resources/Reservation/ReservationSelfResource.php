@@ -16,6 +16,7 @@ class ReservationSelfResource extends JsonResource
             'exit'    => $this->date_exit,
             'created' => $this->created_at,
             'room'    => RoomResource::make($this->room),
+            'price'   => $this->price,
         ];
         return $response;
     }
